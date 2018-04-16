@@ -28,7 +28,7 @@ The main game logic will be `game.js`, and there will also be a folder for objec
 
 ## Wireframe
 
-![Wireframes](/Users/Yujie/Desktop/App Academy/projects/js_project/UltraRapidFire/UltraRapidFire.png)
+![Wireframes](UltraRapidFire.png)
 
 
 
