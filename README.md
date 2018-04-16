@@ -30,6 +30,28 @@ The main game logic will be `game.js`, and there will also be a folder for objec
 
 ![Wireframes](UltraRapidFire.png)
 
+## Timeline
 
+### Day 1
 
++ Set up game on webpack (`webpack.config.js`, `package.json`).
++ Get a basic player ship sprite moving around on the screen with controls, create basic enemy class, and be able to shoot at it
++ Render a scrolling background that will give the feel of moving at high velocity
+
+### Day 2 
++ Create shooting enemies
++ Extend the enemy class to make an enemy that will shoot at you in a spiral fashion.
++ Add explosion effects that render when ships are destroyed
+
+### day 3
++ Learn `Web Audio API` to enable music and game sound effects
++ implement a scoring system, one that will keep track of time survived in the game and also types of enemies destroyed
++ implement the logic for enemies at the player's direction.
+
+### day 4
++ implement power-up system such that destroying some enemies will drop power up boxes, which will upgrade the player's gun (make the player shoot multiple bullets a time, or shoot homing rockets)
++ Create a boss enemy mothership class, that fires the bullets from every type of enemy, and has a health bar, and a set movement pattern.
+
+### day 5
++ polish up visuals
 
