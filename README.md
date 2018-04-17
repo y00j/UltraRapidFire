@@ -55,3 +55,9 @@ The main game logic will be `game.js`, and there will also be a folder for objec
 ### day 5
 + polish up visuals
 
+
+### Bonus features
++ Make more enemy ship types
++ Add more levels
++ Add increasing difficulty
+
