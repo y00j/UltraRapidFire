@@ -1,30 +1,21 @@
-
+import Entity from './entity';
 
 document.addEventListener('DOMContentLoaded', () => {
   var canvas = document.getElementById("canvas");
   var ctx = canvas.getContext("2d");
-  
-  ctx.fillStyle = 'black';
+
+
+  ctx.fillStyle = 'blue';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  var playerReady = false;
-  var playerImage = new Image();
-  playerImage.onload = () => {
-    playerReady = true;
-  };
-
-  playerImage.src = "images/Mother.bmp";
-
-  var player = {
-    speed: 10, 
-    x: 0, 
-    y: 0
-  };
-
-
-  var x = canvas.width/2;
-  var y = canvas.height - 200;
- 
+  
+  var playerReady = true;
+  let player = new Entity(
+    "images/mother.png", 
+    [100, 200], 
+    [200, 100], 
+    500
+  );
   var upPressed = false;
   var downPressed = false;
   var leftPressed = false;
@@ -58,45 +49,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
-  const render = () => {
+  const render = (modifier) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (playerReady) {
-      ctx.drawImage(playerImage, x, y);
+    player.render(ctx);
   
-    }
-    
     if(upPressed) {
-      y -= player.speed;
+      player.pos[1] -= player.speed * modifier;
     } else if(downPressed) {
-      y += player.speed;
+      player.pos[1] += player.speed * modifier;
     }
     
     if(leftPressed) {
-      x -= player.speed;
+      player.pos[0] -= player.speed * modifier;
     } else if(rightPressed) {
-      x += player.speed;
+      player.pos[0] += player.speed * modifier;
     }
 
   };
 
   const main = () => {
-    render();
+
+    const now = Date.now();
+    const delta = now - then;
+
+    render(delta /1000);
+    then = now;
     requestAnimationFrame(main);
     
   };
 
+  let then = Date.now();
   main();
 });
 
 
 
-  // var keysDown = {};
-
-  // addEventListener("keydown", (e) => {
-  //   keysDown[e.keyCode] = true;
-  // }, false);
-
-  // addEventListener("keyup", (e) => {
-  //   delete keysDown[e.keyCode];
-  // }, false );
+  

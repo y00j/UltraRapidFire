@@ -1,0 +1,26 @@
+{
+  "name": "ultra_rapid_fire",
+  "version": "1.0.0",
+  "description": "## Background and Overview UltraRapidFire will be a fast pace classic arcade style shooter inspired by old retro sprite based games such as Space Invaders, and Cho Ren Sha. The player will control a ship using each of the arrow keys to move, and the space bar to shoot.",
+  "main": "bullet.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yujiezhu718/UltraRapidFire.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yujiezhu718/UltraRapidFire/issues"
+  },
+  "homepage": "https://github.com/yujiezhu718/UltraRapidFire#readme",
+  "dependencies": {
+    "webpack": "^4.6.0"
+  },
+  "devDependencies": {
+    "webpack-cli": "^2.0.14"
+  }
+}
