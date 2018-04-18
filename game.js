@@ -1,7 +1,7 @@
 import Entity from './entity';
 import Bullet from './bullet';
 import Ship from './ship';
-
+ 
 document.addEventListener('DOMContentLoaded', () => {
   var canvas = document.getElementById("canvas");
   var ctx = canvas.getContext("2d");
@@ -11,27 +11,14 @@ document.addEventListener('DOMContentLoaded', () => {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   
-  var playerReady = true;
-  let player = new Entity(
-    "images/mother.png", 
-    [100, 200], 
-    [200, 100], 
-    500
-  );
-
-  // let bullet = new Bullet (
-  //   'images/sprites.png',
-  //   [10, 10], 
-  //   10, 
-  //   [1, 0], 
-  //   player
-  // );
-
+  let player = new Ship("images/mother.png", [100, 200], [200, 100], 500);
+  
   var upPressed = false;
   var downPressed = false;
   var leftPressed = false;
   var rightPressed = false;
   var spacePressed = false;
+
 
   let lastFire = Date.now();
 
@@ -60,25 +47,23 @@ document.addEventListener('DOMContentLoaded', () => {
       rightPressed = false;
     } else if (e.keyCode == 38) {
       upPressed = false;
-    } else if (e.keyCode == 40) {
+    } else if (e.keyCode == 40) {    
       downPressed = false;
     } else if (e.keyCode == 32) {
       spacePressed = false;
     }
   }
 
-  let bullets = [];
   
   const render = (modifier) => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    player.render(ctx);
     
-    bullets.forEach(bullet => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    player.render(ctx);
+    player.bullets.forEach(bullet => {
       bullet.render(ctx);
-      bullet.pos[0] = (bullet.pos[0] + 10);
     });
     
+    player.updateBullets(canvas);
 
 
     if(upPressed) {
@@ -94,15 +79,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     if(spacePressed && (Date.now() - lastFire > 50)) {
-      let bullet = new Bullet("images/sprites.png", [10, 10], 600, [1, 0], player);
-      bullets.push(bullet);
+      // debugger;
+      player.shootBullet();
       lastFire = Date.now();
     }
 
   };
 
   const main = () => {
-
+    // debugger;
     const now = Date.now();
     const delta = now - then;
 

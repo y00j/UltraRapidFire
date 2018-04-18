@@ -1,7 +1,7 @@
 module.exports = {
   entry: "./game.js",
   output: {
-    filename: "./bundle.js"
+    filename: "./dist/bundle.js"
   },
   devtool: "source-map"
 };
