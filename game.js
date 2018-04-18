@@ -19,18 +19,21 @@ document.addEventListener('DOMContentLoaded', () => {
     500
   );
 
-  let bullet = new Bullet (
-    'images/sprites.png',
-    [10, 10], 
-    10, 
-    [1, 0]
-  );
+  // let bullet = new Bullet (
+  //   'images/sprites.png',
+  //   [10, 10], 
+  //   10, 
+  //   [1, 0], 
+  //   player
+  // );
 
   var upPressed = false;
   var downPressed = false;
   var leftPressed = false;
   var rightPressed = false;
   var spacePressed = false;
+
+  let lastFire = Date.now();
 
   document.addEventListener("keydown", keyDownHandler, false);
   document.addEventListener("keyup", keyUpHandler, false);
@@ -63,13 +66,21 @@ document.addEventListener('DOMContentLoaded', () => {
       spacePressed = false;
     }
   }
+
+  let bullets = [];
   
   const render = (modifier) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     player.render(ctx);
-    bullet.render(ctx, player);
-  
+    
+    bullets.forEach(bullet => {
+      bullet.render(ctx);
+      bullet.pos[0] = (bullet.pos[0] + 10);
+    });
+    
+
+
     if(upPressed) {
       player.pos[1] -= player.speed * modifier;
     } else if(downPressed) {
@@ -80,6 +91,12 @@ document.addEventListener('DOMContentLoaded', () => {
       player.pos[0] -= player.speed * modifier;
     } else if(rightPressed) {
       player.pos[0] += player.speed * modifier;
+    }
+    
+    if(spacePressed && (Date.now() - lastFire > 50)) {
+      let bullet = new Bullet("images/sprites.png", [10, 10], 600, [1, 0], player);
+      bullets.push(bullet);
+      lastFire = Date.now();
     }
 
   };
