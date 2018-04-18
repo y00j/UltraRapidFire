@@ -11,8 +11,15 @@ document.addEventListener('DOMContentLoaded', () => {
   
 
   
-  let player = new Ship("images/mother.png", [100, 200], [200, 100], 500);
-  // let enemy = new Enemy("images/battle_cruiser.png", [])
+  let player = new Ship("images/mother.png", [50, 100], [100, 50], 500);
+  let enemy = new Enemy(
+    "images/battle_cruiser.png", 
+    [200, 200], 
+    100, 
+    [800, 800],
+    [90, 130], 
+    [100, 100]
+  );
   
   var upPressed = false;
   var downPressed = false;
@@ -63,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     ctx.fillStyle = "grey";
     player.render(ctx);
+    enemy.render(ctx);
     player.bullets.forEach(bullet => {
       bullet.render(ctx);
     });
@@ -82,8 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
       player.pos[0] += player.speed * modifier;
     }
     
-    if(spacePressed && (Date.now() - lastFire > 50)) {
-      // debugger;
+    if(spacePressed && (Date.now() - lastFire > 150)) {
       player.shootBullet();
       lastFire = Date.now();
     }
@@ -91,7 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const main = () => {
-    // debugger;
     const now = Date.now();
     const delta = now - then;
 

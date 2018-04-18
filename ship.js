@@ -10,7 +10,7 @@ class Ship extends Entity {
   }
 
   shootBullet() {
-    let bullet = new Bullet("images/sprites.png", [20, 20], 10, [1, 0], this);
+    let bullet = new Bullet("images/sprites.png", [10, 10], 10, [1, 0], this);
     console.log(bullet);
     this.bullets.push(bullet);
   }

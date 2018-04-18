@@ -1,14 +1,10 @@
-import Entity from './entity';
+import Sprite from './sprite';
 
-class Bullet {
-  constructor(url, size, speed, vector, ownerShip) {
-    this.image = new Image(size[0], size[1]);
-    this.image.src = url;
-    this.size = size;
+class Bullet extends Sprite{
+  constructor(url, size, speed, vector, ownerShip) { 
+    super(url, size, speed, [ownerShip.pos[0] + 25, ownerShip.pos[1] + 46]);
     this.speed = speed;
     this.vector = vector;
-    this.render = this.render.bind(this);
-    this.pos = [ownerShip.pos[0] + 50, ownerShip.pos[1] + 46];
   }
 
   render(ctx) {

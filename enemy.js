@@ -1,14 +1,10 @@
-import Entity from './entity';
+import Sprite from './sprite';
 
-class Enemy extends Entity {
-  constructor(url, pos, size, speed) {
-    super(url, pos, size, speed); 
+class Enemy extends Sprite {
+  constructor(url, size, speed, pos, spritePos, spriteSize) {
+    super(url, size, speed, pos, spritePos, spriteSize);
+    this.bullets = [];
   }
-
-  move() {
-
-  }
-  
 }
 
 export default Enemy;
