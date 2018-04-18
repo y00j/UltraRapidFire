@@ -1,17 +1,18 @@
 import Entity from './entity';
 import Bullet from './bullet';
 import Ship from './ship';
+import Enemy from './enemy';
  
 document.addEventListener('DOMContentLoaded', () => {
   var canvas = document.getElementById("canvas");
   var ctx = canvas.getContext("2d");
 
 
-  ctx.fillStyle = 'blue';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
 
   
   let player = new Ship("images/mother.png", [100, 200], [200, 100], 500);
+  // let enemy = new Enemy("images/battle_cruiser.png", [])
   
   var upPressed = false;
   var downPressed = false;
@@ -58,6 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const render = (modifier) => {
     
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "grey";
     player.render(ctx);
     player.bullets.forEach(bullet => {
       bullet.render(ctx);

@@ -1,12 +1,12 @@
 import Entity from './entity';
 
 class Bullet {
-  constructor(url, size, speed, startVector, ownerShip) {
+  constructor(url, size, speed, vector, ownerShip) {
     this.image = new Image(size[0], size[1]);
     this.image.src = url;
     this.size = size;
     this.speed = speed;
-    this.startVector = startVector;
+    this.vector = vector;
     this.render = this.render.bind(this);
     this.pos = [ownerShip.pos[0] + 50, ownerShip.pos[1] + 46];
   }
