@@ -1,11 +1,10 @@
 class Entity {
-  constructor(url, pos, size, speed, startDir) {
+  constructor(url, pos, size, speed) {
     this.image = new Image(size[0], size[1]);
     this.image.src = url;
     this.pos = pos;
     this.size = size;
     this.speed = speed;
-    this.startDir = startDir;
 
     this.render = this.render.bind(this);
   }
