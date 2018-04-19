@@ -1,5 +1,6 @@
 import Entity from './entity';
 import Bullet from './bullet';
+import * as Util from './util';
 
 class Ship extends Entity {
   constructor(url, pos, size, speed) {
@@ -27,8 +28,9 @@ class Ship extends Entity {
           i--;
       }
     }
-
   }
+
+
 
 }
 

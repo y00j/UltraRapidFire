@@ -1,6 +1,7 @@
 import Sprite from './sprite';
 import Entity from './entity';
 import Bullet from './bullet';
+import * as Util from './util';
 
 class Enemy extends Entity {
   constructor(url, pos, size, speed) {
@@ -38,7 +39,7 @@ class Enemy extends Entity {
       bullet.pos[1] = bullet.pos[1] + bullet.vector[1] * bullet.speed;
 
       if (
-        bullet.pos[0] > canvas.width ||
+        bullet.pos[0] < 0 || bullet.pos[0] > canvas.width ||
         bullet.pos[1] > canvas.height ||
         bullet.pos[1] < 0
       ) {

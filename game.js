@@ -30,19 +30,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   let lastFire = Date.now();
+  let lastEnemyFire = Date.now();
 
   document.addEventListener("keydown", keyDownHandler, false);
   document.addEventListener("keyup", keyUpHandler, false);
 
   function collides(x, y, r, b, x2, y2, r2, b2) {
-    return !(r <= x2 || x > r2 || b <= y2 || y > b2);
+    //x -> bullet.pos[0]
+    //y --> bullet.pos[1]
+    //r  10
+    //b  10
+    //r2 50 
+    //b2 40
+    //x2 -> player.pos[0]
+    //y2 -> player.pos[1]
+
+
+    // return !(r <= x2 || x > r2 || b <= y2 || y > b2);
+    return (x > (x2 - r) && x < (x2 + r2 + r)) && (y > (y2 - b) && y < (y2 + b2 + b));
   }
 
   function boxCollides(pos, size, pos2, size2) {
-    return collides(pos[0], pos[1], pos[0] + size[0], pos[1] + size[1], pos2[0], pos2[1], pos2[0] + size2[0], pos2[1] + size2[1]);
+    return collides(pos[0], pos[1], size[0], size[1], pos2[0], pos2[1], size2[0], size2[1]);
+    // return collides(pos[0], pos[1], pos[0] + size[0], pos[1] + size[1], pos2[0], pos2[1], pos2[0] + size2[0], pos2[1] + size2[1]);
+
   }
 
-  function checkCollisions () {
+  function checkPlayerBulletCollisions () {
     for(let i = 0; i < player.bullets.length; i++) {
       let pos1 = player.bullets[i].pos;
       let size1 = player.bullets[i].size;
@@ -53,12 +67,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if(boxCollides(pos1, size1, pos2, size2)) {
           enemies.splice(j, 1);
+          player.bullets.splice(i, 1);
+          i--;
           j--;
         }
       }
-
     }
   }
+
+  function checkEnemyBulletCollisions () {
+    let bulletCollision = false;
+    for (let i = 0; i < enemies.length; i++) {
+
+      for (let j = 0; j < enemies[i].bullets.length; j++) {
+        let pos1 = enemies[i].bullets[j].pos;
+        let size1 = enemies[i].bullets[j].size;
+
+        if (boxCollides(enemies[i].bullets[j].pos, enemies[i].bullets[j].size, player.pos, player.size)) {
+          bulletCollision = true;
+          enemies[i].bullets.splice(j, 1);
+          j--;
+        }
+        // console.log(boxCollides(pos1, size1, player.pos, player.size)); 
+        // return boxCollides(pos1, size1, player.pos, player.size); 
+      }
+    }
+    return bulletCollision;
+  }
+  
 
   function keyDownHandler(e) {
     if (e.keyCode == 37) {
@@ -88,20 +124,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  
-  const render = (modifier) => {
-    
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = "grey";
+  function updateAllEntities() {
     player.render(ctx);
-    enemies.forEach((enem) => {
+    enemies.forEach(enem => {
       enem.render(ctx);
       enem.updateBullets(canvas);
-      
     });
-    
+
     player.bullets.forEach(bullet => {
       bullet.render(ctx);
     });
@@ -109,9 +138,30 @@ document.addEventListener('DOMContentLoaded', () => {
     enemy.bullets.forEach(bullet => {
       bullet.render(ctx);
     });
-    
+
     player.updateBullets(canvas);
-    checkCollisions();
+    checkPlayerBulletCollisions();
+
+    if (Date.now() - lastEnemyFire > 200) {
+      enemy.shootBullet(player);
+      console.log(enemy.bullets);
+      console.log(player.pos);
+      lastEnemyFire = Date.now();
+    } 
+    if (checkEnemyBulletCollisions()) {
+      console.log("you died");
+    }  
+}
+
+  
+  const render = (modifier) => {
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "grey";
+
+    updateAllEntities();
 
 
     if(upPressed) {
@@ -127,11 +177,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     if(spacePressed && (Date.now() - lastFire > 150)) {
-      enemy.shootBullet(player);
-
+      player.shootBullet();
       lastFire = Date.now();
     }
-
+    
   };
 
   const main = () => {
