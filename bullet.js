@@ -2,7 +2,7 @@ import Sprite from './sprite';
 
 class Bullet extends Sprite{
   constructor(url, size, speed, vector, ownerShip) { 
-    super(url, size, speed, [ownerShip.pos[0] + 25, ownerShip.pos[1] + 46]);
+    super(url, size, speed, [ownerShip.pos[0] + ownerShip.size[0]/2, ownerShip.pos[1]]);
     this.speed = speed;
     this.vector = vector;
   }

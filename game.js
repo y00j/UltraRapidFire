@@ -9,15 +9,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let enemies = [];
 
-  let player = new Ship("images/mother.png", [50, 100], [100, 50], 500);
-  let enemy = new Enemy(
-    "images/battle_cruiser.png", 
-    [200, 170], 
-    100, 
-    [500, 500],
-    [90, 130], 
-    [88, 70]
-  );
+  let player = new Ship("images/main_player.png", [canvas.width/2, 700], [50, 40], 500);
+  let enemy = new Enemy("images/mother1.png", [canvas.width/2, 0], [75, 100], 0);
+  // let enemy = new Enemy(
+  //   "images/battle_cruiser.png", 
+  //   [200, 170], 
+  //   1, 
+  //   [600, 10],
+  //   [90, 130], 
+  //   [88, 70]
+  // );
   
   enemies.push(enemy);
 
@@ -97,8 +98,15 @@ document.addEventListener('DOMContentLoaded', () => {
     player.render(ctx);
     enemies.forEach((enem) => {
       enem.render(ctx);
+      enem.updateBullets(canvas);
+      
     });
+    
     player.bullets.forEach(bullet => {
+      bullet.render(ctx);
+    });
+
+    enemy.bullets.forEach(bullet => {
       bullet.render(ctx);
     });
     
@@ -110,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
       player.pos[1] -= player.speed * modifier;
     } else if(downPressed) {
       player.pos[1] += player.speed * modifier;
-    }
+    } 
     
     if(leftPressed) {
       player.pos[0] -= player.speed * modifier;
@@ -119,7 +127,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     if(spacePressed && (Date.now() - lastFire > 150)) {
-      player.shootBullet();
+      enemy.shootBullet(player);
+
       lastFire = Date.now();
     }
 

@@ -19,7 +19,7 @@ class Ship extends Entity {
     for(let i = 0; i < this.bullets.length; i++) {
       let bullet = this.bullets[i];
 
-      bullet.pos[0] = bullet.pos[0] + bullet.speed;
+      bullet.pos[1] = bullet.pos[1] - bullet.speed;
 
       if(bullet.pos[0] > canvas.width || bullet.pos[1] > canvas.height ||
         bullet.pos[1] < 0) {

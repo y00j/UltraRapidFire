@@ -6,6 +6,7 @@ class Sprite {
     this.size = size;
     this.render = this.render.bind(this);
     this.pos = pos;
+    this.speed = speed;
     this.spritePos = spritePos;
     this.spriteSize = spriteSize;
   }
