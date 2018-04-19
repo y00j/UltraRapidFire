@@ -5,6 +5,8 @@ class Enemy extends Sprite {
     super(url, size, speed, pos, spritePos, spriteSize);
     this.bullets = [];
   }
+
+    
 }
 
 export default Enemy;

@@ -7,20 +7,20 @@ document.addEventListener('DOMContentLoaded', () => {
   var canvas = document.getElementById("canvas");
   var ctx = canvas.getContext("2d");
 
+  let enemies = [];
 
-  
-
-  
   let player = new Ship("images/mother.png", [50, 100], [100, 50], 500);
   let enemy = new Enemy(
     "images/battle_cruiser.png", 
-    [200, 200], 
+    [200, 170], 
     100, 
-    [800, 800],
+    [500, 500],
     [90, 130], 
-    [100, 100]
+    [88, 70]
   );
   
+  enemies.push(enemy);
+
   var upPressed = false;
   var downPressed = false;
   var leftPressed = false;
@@ -33,6 +33,31 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener("keydown", keyDownHandler, false);
   document.addEventListener("keyup", keyUpHandler, false);
 
+  function collides(x, y, r, b, x2, y2, r2, b2) {
+    return !(r <= x2 || x > r2 || b <= y2 || y > b2);
+  }
+
+  function boxCollides(pos, size, pos2, size2) {
+    return collides(pos[0], pos[1], pos[0] + size[0], pos[1] + size[1], pos2[0], pos2[1], pos2[0] + size2[0], pos2[1] + size2[1]);
+  }
+
+  function checkCollisions () {
+    for(let i = 0; i < player.bullets.length; i++) {
+      let pos1 = player.bullets[i].pos;
+      let size1 = player.bullets[i].size;
+
+      for(let j= 0; j < enemies.length; j++) {
+        let pos2 = enemies[j].pos;
+        let size2 = enemies[j].size;
+
+        if(boxCollides(pos1, size1, pos2, size2)) {
+          enemies.splice(j, 1);
+          j--;
+        }
+      }
+
+    }
+  }
 
   function keyDownHandler(e) {
     if (e.keyCode == 37) {
@@ -70,12 +95,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     ctx.fillStyle = "grey";
     player.render(ctx);
-    enemy.render(ctx);
+    enemies.forEach((enem) => {
+      enem.render(ctx);
+    });
     player.bullets.forEach(bullet => {
       bullet.render(ctx);
     });
     
     player.updateBullets(canvas);
+    checkCollisions();
 
 
     if(upPressed) {
