@@ -5,9 +5,24 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <canvas id="canvas" width="800" height="800"></canvas>
+
+    <div class="game-body">
+      <h1 class="title">Ultra Rapid Fire</h1>
+      <canvas id="canvas" width="800" height="800"></canvas>
+      <h2>controls: arrows :)</h2>
+      <audio controls loop src="sounds/Zero Respect.mp3" id="theme"></audio>
+
+    </div>
   </body>
   
+  <audio src="sounds/explosion_large.mp3" id="large-explosion"></audio>
+  <audio src="sounds/explosion_small.mp3" id="small-explosion"></audio>
+  <audio src="sounds/explosion_player.mp3" id="player-explosion"></audio>
+  
+
+
+
+
   <script src="./dist/bundle.js"></script>
 
 </html>

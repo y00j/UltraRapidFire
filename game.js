@@ -8,6 +8,22 @@ document.addEventListener('DOMContentLoaded', () => {
   var canvas = document.getElementById("canvas");
   var ctx = canvas.getContext("2d");
 
+  var smallESound = document.getElementById("small-explosion");
+  var largeESound = document.getElementById("large-explosion");
+  var playerESound = document.getElementById("player-explosion");
+
+  largeESound.volume = 0.15;
+  smallESound.volume = 0.15;
+  playerESound.volume = 0.15;
+
+  var themeSong = document.getElementById("theme");
+  themeSong.play();
+
+  // var music1 = new sound("sounds/Sunstrider.mp3");
+
+  // music1.play();
+  // var largeExplosion = new sound("sounds/explosion_small.mp3");
+
   // let backgroundImage = new Image(canvas.height, canvas.width);
   // backgroundImage.src = "images/mother1.png";
 
@@ -18,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let enemies = [];
   let explosions = [];
+  let enemyCount = 1;
 
   // let explosion = new Explosion(
   //   'images/sprites.png', 
@@ -82,6 +99,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   }
 
+  function spawnEnemies() {
+    for(let i = 0; i < enemyCount; i++){
+      let enemy = new Enemy("images/mother1.png", [canvas.width / 4 - 33, 50], [75, 100], 100);
+      enemies.push(enemy);
+    }
+
+  }
+
   function checkPlayerBulletCollisions () {
     for(let i = 0; i < player.bullets.length; i++) {
       let pos1 = player.bullets[i].pos;
@@ -96,6 +121,8 @@ document.addEventListener('DOMContentLoaded', () => {
             enemies[j].health--;
             let explosion = new Explosion("images/sprites.png", [50, 50], [0, 0], [pos1[0] - 25, pos1[1]- 50], [0, 117], [39, 39], 39, 13);
             explosions.push(explosion);
+            smallESound.play();
+
           } else {
             let explosion1 = new Explosion("images/sprites.png", [200, 200], [0, 0], [pos2[0]-50, pos2[1]-50], [0, 117], [39, 39], 39, 13);
             let explosion2 = new Explosion("images/sprites.png", [200, 200], [0, 0], [pos1[0]-100, pos1[1]-100], [0, 117], [39, 39], 39, 13);
@@ -104,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
             explosions.push(explosion2);
             explosions.push(explosion3);
             enemies.splice(j, 1);
+            largeESound.play();
             j--;
           }
           player.bullets.splice(i, 1);
@@ -123,6 +151,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (boxCollides(enemies[i].bullets[j].pos, enemies[i].bullets[j].size, player.pos, player.size)) {
           bulletCollision = true;
+          let explosion = new Explosion("images/sprites.png", [100, 100], [0, 0], [pos1[0]-50, pos1[1]-20], [0, 117], [39, 39], 39, 13);
+          explosions.push(explosion);
+          playerESound.play();
+          player.lives--;
+
           enemies[i].bullets.splice(j, 1);
           j--;
         }
@@ -189,11 +222,12 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     if (checkEnemyBulletCollisions()) {
+
       console.log("you died");
     } 
     
     explosions.forEach(explosion => {
-      explosion.animateExplosion(ctx);
+      explosion.animateExplosion(ctx);  
     });
 }
 
@@ -221,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
       player.pos[0] += player.speed * modifier;
     }
     
-    if(spacePressed && (Date.now() - lastFire > 300)) {
+    if(spacePressed && (Date.now() - lastFire > 500)) {
       player.shootBullet();
       lastFire = Date.now();
     }
@@ -235,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
     render(delta /1000);
     then = now;
     requestAnimationFrame(main);
-    
+    // if (player.lives ===0) window.cancelAnimationFrame();
   };
 
   let then = Date.now();
