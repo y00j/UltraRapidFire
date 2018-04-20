@@ -8,6 +8,7 @@ h1 {
 
 canvas {
   background-image: url("images/farback.png");
+  height: 100vh;
   background-size: cover;
   background-repeat: no-repeat;
   border: 5px solid darksalmon;

@@ -302,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let enemy2;
 
   function start() {
-    player = new __WEBPACK_IMPORTED_MODULE_2__ship__["a" /* default */]("images/main_player.png", [canvas.width / 2 - 25, 700], [50, 40], 500);
+    player = new __WEBPACK_IMPORTED_MODULE_2__ship__["a" /* default */]("images/main_player.png", [canvas.width / 2 - 25, 500], [50, 40], 500);
     enemy1 = new __WEBPACK_IMPORTED_MODULE_3__enemy__["a" /* default */]("images/mother1.png", [canvas.width / 4 - 33, 50], [75, 100], 100);
     enemy2 = new __WEBPACK_IMPORTED_MODULE_3__enemy__["a" /* default */]("images/mother1.png", [canvas.width * 3 / 4 - 33, 50], [75, 100], 100);
     enemies.push(enemy1);

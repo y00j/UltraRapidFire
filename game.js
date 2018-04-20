@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let enemy2;
 
   function start() {
-    player = new Ship("images/main_player.png", [canvas.width / 2 - 25, 700], [50, 40], 500);
+    player = new Ship("images/main_player.png", [canvas.width / 2 - 25, 500], [50, 40], 500);
     enemy1 = new Enemy("images/mother1.png", [canvas.width / 4 - 33, 50], [75, 100], 100);
     enemy2 = new Enemy("images/mother1.png", [canvas.width * 3 / 4 - 33, 50], [75, 100], 100);
     enemies.push(enemy1);
