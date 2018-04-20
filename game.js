@@ -2,15 +2,40 @@ import Entity from './entity';
 import Bullet from './bullet';
 import Ship from './ship';
 import Enemy from './enemy';
+import Explosion from './explosion';
  
 document.addEventListener('DOMContentLoaded', () => {
   var canvas = document.getElementById("canvas");
   var ctx = canvas.getContext("2d");
 
-  let enemies = [];
+  // let backgroundImage = new Image(canvas.height, canvas.width);
+  // backgroundImage.src = "images/mother1.png";
 
-  let player = new Ship("images/main_player.png", [canvas.width/2, 700], [50, 40], 500);
-  let enemy = new Enemy("images/mother1.png", [canvas.width/2, 0], [75, 100], 0);
+  // const background = ctx.createPattern(backgroundImage, "repeat");
+  // console.log(typeof backgroundImage);
+
+  // console.log(background);
+
+  let enemies = [];
+  let explosions = [];
+
+  // let explosion = new Explosion(
+  //   'images/sprites.png', 
+  //   [100, 100],
+  //   [0,0],
+  //   [100, 100], 
+  //   [0, 117],
+  //   [39, 39], 
+  //   39, 
+  //   13 
+  // );
+
+  
+
+  let player = new Ship("images/main_player.png", [canvas.width/2 - 25, 700], [50, 40], 500);
+  let enemy1 = new Enemy("images/mother1.png", [canvas.width/4 - 33, 50], [75, 100], 100);
+  let enemy2 = new Enemy("images/mother1.png", [canvas.width * 3 / 4 - 33, 50], [75, 100], 100);
+
   // let enemy = new Enemy(
   //   "images/battle_cruiser.png", 
   //   [200, 170], 
@@ -20,7 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
   //   [88, 70]
   // );
   
-  enemies.push(enemy);
+  enemies.push(enemy1);
+  enemies.push(enemy2);
 
   var upPressed = false;
   var downPressed = false;
@@ -66,15 +92,27 @@ document.addEventListener('DOMContentLoaded', () => {
         let size2 = enemies[j].size;
 
         if(boxCollides(pos1, size1, pos2, size2)) {
-          enemies.splice(j, 1);
+          if(enemies[j].health > 0) {
+            enemies[j].health--;
+            let explosion = new Explosion("images/sprites.png", [50, 50], [0, 0], [pos1[0] - 25, pos1[1]- 50], [0, 117], [39, 39], 39, 13);
+            explosions.push(explosion);
+          } else {
+            let explosion1 = new Explosion("images/sprites.png", [200, 200], [0, 0], [pos2[0]-50, pos2[1]-50], [0, 117], [39, 39], 39, 13);
+            let explosion2 = new Explosion("images/sprites.png", [200, 200], [0, 0], [pos1[0]-100, pos1[1]-100], [0, 117], [39, 39], 39, 13);
+            let explosion3 = new Explosion("images/sprites.png", [200, 200], [0, 0], [pos1[0] - 50, pos1[1]-50], [0, 117], [39, 39], 39, 13);
+            explosions.push(explosion1);
+            explosions.push(explosion2);
+            explosions.push(explosion3);
+            enemies.splice(j, 1);
+            j--;
+          }
           player.bullets.splice(i, 1);
           i--;
-          j--;
         }
       }
     }
   }
-
+ 
   function checkEnemyBulletCollisions () {
     let bulletCollision = false;
     for (let i = 0; i < enemies.length; i++) {
@@ -134,35 +172,42 @@ document.addEventListener('DOMContentLoaded', () => {
     player.bullets.forEach(bullet => {
       bullet.render(ctx);
     });
+    enemies.forEach(enemy => {
+      enemy.bullets.forEach(bullet => {
+        bullet.render(ctx);
+      });
 
-    enemy.bullets.forEach(bullet => {
-      bullet.render(ctx);
-    });
+      } 
+    );
 
     player.updateBullets(canvas);
     checkPlayerBulletCollisions();
-
-    if (Date.now() - lastEnemyFire > 200) {
-      enemy.shootBullet(player);
-      console.log(enemy.bullets);
-      console.log(player.pos);
-      lastEnemyFire = Date.now();
-    } 
+    enemies.forEach(enemy => {
+      if (Date.now() - enemy.lastTimeFired > 500) {
+        enemy.shootBullet(player);
+        enemy.lastTimeFired = Date.now();
+      }
+    });
     if (checkEnemyBulletCollisions()) {
       console.log("you died");
-    }  
+    } 
+    
+    explosions.forEach(explosion => {
+      explosion.animateExplosion(ctx);
+    });
 }
 
   
   const render = (modifier) => {
     
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // ctx.fillStyle = background;
+    
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = "grey";
+    ctx.fillStyle = "rgba(255, 255, 255, 0)";
 
     updateAllEntities();
-
 
     if(upPressed) {
       player.pos[1] -= player.speed * modifier;
@@ -176,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
       player.pos[0] += player.speed * modifier;
     }
     
-    if(spacePressed && (Date.now() - lastFire > 150)) {
+    if(spacePressed && (Date.now() - lastFire > 300)) {
       player.shootBullet();
       lastFire = Date.now();
     }

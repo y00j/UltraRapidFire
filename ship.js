@@ -8,6 +8,7 @@ class Ship extends Entity {
     this.bullets = [];
     this.shootBullet = this.shootBullet.bind(this);
     this.updateBullets = this.updateBullets.bind(this);
+    this.lives = 3;
   }
 
   shootBullet() {

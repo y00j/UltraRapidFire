@@ -9,6 +9,8 @@ class Enemy extends Entity {
     this.bullets = [];
     this.shootBullet = this.shootBullet.bind(this);
     this.updateBullets = this.updateBullets.bind(this);
+    this.health = 10;
+    this.lastTimeFired = Date.now();
   }
 
   // constructor(url, size, speed, pos, spritePos, spriteSize) {
@@ -20,14 +22,14 @@ class Enemy extends Entity {
 
   // move() {
   //   this.pos[0] = (this.initial + Math.cos((this.pos[1])/ 15) * 100);
-  //   this.pos[1] += this.speed;
+  //   this.pos[1] += this.speed; 
   // }
 
   shootBullet(player) {
     let vY = (player.pos[1] - this.pos[1]) / Math.sqrt(Math.pow(player.pos[1] - this.pos[1], 2) + Math.pow(player.pos[0] - this.pos[0], 2));
     let vX = (player.pos[0] - this.pos[0]) / Math.sqrt(Math.pow(player.pos[1] - this.pos[1], 2) + Math.pow(player.pos[0] - this.pos[0], 2));
     // debugger;
-    let bullet = new Bullet("images/sprites.png", [10, 10], 10, [vX, vY], this);
+    let bullet = new Bullet("images/sprites.png", [10, 10], 5, [vX, vY], this);
     this.bullets.push(bullet);
   }
 
