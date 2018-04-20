@@ -5,6 +5,7 @@ import Enemy from './enemy';
 import Explosion from './explosion';
  
 document.addEventListener('DOMContentLoaded', () => {
+
   var canvas = document.getElementById("canvas");
   var ctx = canvas.getContext("2d");
 
@@ -13,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   var playerESound = document.getElementById("player-explosion");
 
   largeESound.volume = 0.15;
-  smallESound.volume = 0.15;
+  smallESound.volume = 0.5;
   playerESound.volume = 0.15;
 
   var themeSong = document.getElementById("theme");
@@ -34,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let enemies = [];
   let explosions = [];
-  let enemyCount = 1;
 
   // let explosion = new Explosion(
   //   'images/sprites.png', 
@@ -49,9 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   
 
-  let player = new Ship("images/main_player.png", [canvas.width/2 - 25, 700], [50, 40], 500);
-  let enemy1 = new Enemy("images/mother1.png", [canvas.width/4 - 33, 50], [75, 100], 100);
-  let enemy2 = new Enemy("images/mother1.png", [canvas.width * 3 / 4 - 33, 50], [75, 100], 100);
+
 
   // let enemy = new Enemy(
   //   "images/battle_cruiser.png", 
@@ -62,8 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
   //   [88, 70]
   // );
   
-  enemies.push(enemy1);
-  enemies.push(enemy2);
+
 
   var upPressed = false;
   var downPressed = false;
@@ -99,13 +96,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
   }
 
-  function spawnEnemies() {
-    for(let i = 0; i < enemyCount; i++){
-      let enemy = new Enemy("images/mother1.png", [canvas.width / 4 - 33, 50], [75, 100], 100);
-      enemies.push(enemy);
-    }
+  let player;
+  let enemy1;
+  let enemy2;
 
+  function start() {
+    player = new Ship("images/main_player.png", [canvas.width / 2 - 25, 700], [50, 40], 500);
+    enemy1 = new Enemy("images/mother1.png", [canvas.width / 4 - 33, 50], [75, 100], 100);
+    enemy2 = new Enemy("images/mother1.png", [canvas.width * 3 / 4 - 33, 50], [75, 100], 100);
+    enemies.push(enemy1);
+    enemies.push(enemy2);
   }
+
+  function gameover() {
+    return enemies.length === 0 || player.lives === 0;
+  }
+
+  // function spawnEnemies() {
+  //   for(let i = 0; i < enemyCount; i++){
+  //     let enemy = new Enemy("images/mother1.png", [canvas.width / 4 - 33, 50], [75, 100], 100);
+  //     enemies.push(enemy);
+  //   }
+
+  // }
 
   function checkPlayerBulletCollisions () {
     for(let i = 0; i < player.bullets.length; i++) {
@@ -155,12 +168,10 @@ document.addEventListener('DOMContentLoaded', () => {
           explosions.push(explosion);
           playerESound.play();
           player.lives--;
-
+          console.log(player.lives);
           enemies[i].bullets.splice(j, 1);
           j--;
         }
-        // console.log(boxCollides(pos1, size1, player.pos, player.size)); 
-        // return boxCollides(pos1, size1, player.pos, player.size); 
       }
     }
     return bulletCollision;
@@ -265,7 +276,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const main = () => {
     const now = Date.now();
     const delta = now - then;
-
+    if (enemies.length === 0){
+      alert("Winner!");
+      enemies.forEach(enemy => {
+        enemy.bullets = [];
+      });
+      start();
+    } else if (player.lives <= 0 ) {
+      alert("game over. play again?");
+      enemies.forEach((enemy) => {enemy.bullets = [];});
+      start();
+    }
     render(delta /1000);
     then = now;
     requestAnimationFrame(main);
@@ -273,7 +294,11 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   let then = Date.now();
-  main();
+  start();
+  if(!gameover()) {
+    main();
+  }
+  
 });
 
 
