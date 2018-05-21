@@ -21,12 +21,14 @@ document.addEventListener('DOMContentLoaded', () => {
   playerESound.volume = 0.15;
 
   var themeSong = document.getElementById("theme");
-  themeSong.play();
 
   let enemies = [];
   let explosions = [];
+  let playerArray = [];
 
 
+
+  
   
 
 
@@ -61,8 +63,11 @@ document.addEventListener('DOMContentLoaded', () => {
     player = new Ship("images/main_player.png", [canvas.width / 2 - 25, 500], [50, 40], 500);
     enemy1 = new Enemy("images/mother1.png", [canvas.width / 4 - 33, 50], [75, 100], 100);
     enemy2 = new Enemy("images/mother1.png", [canvas.width * 3 / 4 - 33, 50], [75, 100], 100);
+    playerArray.push(player);
     enemies.push(enemy1);
     enemies.push(enemy2);
+    themeSong.play();
+
   }
 
   function gameover() {
@@ -125,7 +130,10 @@ document.addEventListener('DOMContentLoaded', () => {
           explosions.push(explosion);
           playerESound.play();
           player.lives--;
-          console.log(player.lives);
+          if(player.lives <= 0) {
+            let explosion1 = new Explosion("images/sprites.png", [200, 200], [0, 0], [pos1[0]-50, pos1[1]-20], [0, 117], [39, 39], 39, 13);
+            explosions.push(explosion1);
+          }
           enemies[i].bullets.splice(j, 1);
           j--;
         }
@@ -172,6 +180,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function renderExplosions() {
+    explosions.forEach(explosion => {
+      explosion.animateExplosion(ctx);  
+    });
+
+    for(let i = 0; i < explosions.length; i++) {
+      if( explosions[i] && explosions[i].shiftFrames <= 0) {
+        delete explosions[i];
+        i--;
+      }  
+    }
+
+    console.log(explosions);
+  }
+
   function updateAllEntities() {
     player.render(ctx);
     enemies.forEach(enem => {
@@ -198,14 +221,10 @@ document.addEventListener('DOMContentLoaded', () => {
         enemy.lastTimeFired = Date.now();
       }
     });
-    if (checkEnemyBulletCollisions()) {
-
-      console.log("you died");
-    } 
     
-    explosions.forEach(explosion => {
-      explosion.animateExplosion(ctx);  
-    });
+    checkEnemyBulletCollisions(); 
+    
+    renderExplosions();
 }
 
   
@@ -243,17 +262,17 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const now = Date.now();
     const delta = now - then;
-    if (enemies.length === 0){
-      alert("Winner!");
-      enemies.forEach(enemy => {
-        enemy.bullets = [];
-      });
-      loadEntities();
-    } else if (player.lives <= 0 ) {
-      alert("game over. play again?");
-      enemies.forEach((enemy) => {enemy.bullets = [];});
-      loadEntities();
-    }
+    // if (enemies.length === 0){
+    //   alert("Winner!");
+    //   enemies.forEach(enemy => {
+    //     enemy.bullets = [];
+    //   });
+    //   loadEntities();
+    // } else if (player.lives <= 0 ) {
+    //   alert("game over. play again?");
+    //   enemies.forEach((enemy) => {enemy.bullets = [];});
+    //   loadEntities();
+    // }
     render(delta /1000);
     then = now;
     if (gameIsRunning) {
