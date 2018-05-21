@@ -3,8 +3,11 @@ import Bullet from './bullet';
 import Ship from './ship';
 import Enemy from './enemy';
 import Explosion from './explosion';
+import { request } from 'https';
  
 document.addEventListener('DOMContentLoaded', () => {
+
+  let gameIsRunning = true;
 
   var canvas = document.getElementById("canvas");
   var ctx = canvas.getContext("2d");
@@ -20,45 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
   var themeSong = document.getElementById("theme");
   themeSong.play();
 
-  // var music1 = new sound("sounds/Sunstrider.mp3");
-
-  // music1.play();
-  // var largeExplosion = new sound("sounds/explosion_small.mp3");
-
-  // let backgroundImage = new Image(canvas.height, canvas.width);
-  // backgroundImage.src = "images/mother1.png";
-
-  // const background = ctx.createPattern(backgroundImage, "repeat");
-  // console.log(typeof backgroundImage);
-
-  // console.log(background);
-
   let enemies = [];
   let explosions = [];
 
-  // let explosion = new Explosion(
-  //   'images/sprites.png', 
-  //   [100, 100],
-  //   [0,0],
-  //   [100, 100], 
-  //   [0, 117],
-  //   [39, 39], 
-  //   39, 
-  //   13 
-  // );
 
-  
-
-
-
-  // let enemy = new Enemy(
-  //   "images/battle_cruiser.png", 
-  //   [200, 170], 
-  //   1, 
-  //   [600, 10],
-  //   [90, 130], 
-  //   [88, 70]
-  // );
   
 
 
@@ -76,17 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener("keyup", keyUpHandler, false);
 
   function collides(x, y, r, b, x2, y2, r2, b2) {
-    //x -> bullet.pos[0]
-    //y --> bullet.pos[1]
-    //r  10
-    //b  10
-    //r2 50 
-    //b2 40
-    //x2 -> player.pos[0]
-    //y2 -> player.pos[1]
-
-
-    // return !(r <= x2 || x > r2 || b <= y2 || y > b2);
     return (x > (x2 - r) && x < (x2 + r2 + r)) && (y > (y2 - b) && y < (y2 + b2 + b));
   }
 
@@ -100,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let enemy1;
   let enemy2;
 
-  function start() {
+  function loadEntities() {
     player = new Ship("images/main_player.png", [canvas.width / 2 - 25, 500], [50, 40], 500);
     enemy1 = new Enemy("images/mother1.png", [canvas.width / 4 - 33, 50], [75, 100], 100);
     enemy2 = new Enemy("images/mother1.png", [canvas.width * 3 / 4 - 33, 50], [75, 100], 100);
@@ -189,6 +146,15 @@ document.addEventListener('DOMContentLoaded', () => {
       downPressed = true;
     } else if (e.keyCode == 32) {
       spacePressed = true;
+    } else if (e.keyCode == 27) {
+      gameIsRunning = !gameIsRunning;
+
+      if(gameIsRunning) {
+        requestAnimationFrame(main);
+        themeSong.play();
+      } else {
+        themeSong.pause();
+      }
     }
   }
 
@@ -274,6 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const main = () => {
+    
     const now = Date.now();
     const delta = now - then;
     if (enemies.length === 0){
@@ -281,20 +248,22 @@ document.addEventListener('DOMContentLoaded', () => {
       enemies.forEach(enemy => {
         enemy.bullets = [];
       });
-      start();
+      loadEntities();
     } else if (player.lives <= 0 ) {
       alert("game over. play again?");
       enemies.forEach((enemy) => {enemy.bullets = [];});
-      start();
+      loadEntities();
     }
     render(delta /1000);
     then = now;
-    requestAnimationFrame(main);
+    if (gameIsRunning) {
+      requestAnimationFrame(main);
+    }
     // if (player.lives ===0) window.cancelAnimationFrame();
   };
 
   let then = Date.now();
-  start();
+  loadEntities();
   if(!gameover()) {
     main();
   }
