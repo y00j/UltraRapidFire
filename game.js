@@ -7,7 +7,7 @@ import { request } from 'https';
  
 document.addEventListener('DOMContentLoaded', () => {
 
-  let gameIsRunning = true;
+  let gameIsRunning = false;
 
   var canvas = document.getElementById("canvas");
   var ctx = canvas.getContext("2d");
@@ -20,17 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
   smallESound.volume = 0.5;
   playerESound.volume = 0.15;
 
+
   var themeSong = document.getElementById("theme");
 
   let enemies = [];
   let explosions = [];
   let playerArray = [];
-
-
-
-  
-  
-
 
   var upPressed = false;
   var downPressed = false;
@@ -38,12 +33,72 @@ document.addEventListener('DOMContentLoaded', () => {
   var rightPressed = false;
   var spacePressed = false;
 
+  let soundIsPlaying = false;
 
   let lastFire = Date.now();
   let lastEnemyFire = Date.now();
 
   document.addEventListener("keydown", keyDownHandler, false);
   document.addEventListener("keyup", keyUpHandler, false);
+
+  let soundButton = document.querySelector(".toggle-sound-btn");
+  soundButton.addEventListener("click", toggleSound);
+
+  let titleModal = document.querySelector(".title-modal");
+  let playGameButton = document.querySelector(".play-game-btn");
+  playGameButton.addEventListener("click", startGame);
+
+
+  let gameOverModal = document.querySelector(".game-over-modal");
+  let playAgainButton = document.querySelector(".play-again-btn");
+  playAgainButton.addEventListener("click", restartGame);
+
+
+  let pauseModal = document.querySelector(".pause-modal");
+  let resumeGameButton = document.querySelector(".resume-btn");
+  resumeGameButton.addEventListener("click", togglePause);
+
+  function toggleSound() {
+    soundIsPlaying = !soundIsPlaying;
+    if (soundIsPlaying) {
+      themeSong.play();
+    } else {
+      themeSong.pause();
+    }
+  }
+
+  function togglePause() {
+    gameIsRunning = !gameIsRunning;
+    pauseModal.classList.toggle("hide");
+
+    if(gameIsRunning && !gameover()) {
+      requestAnimationFrame(main);
+      if (soundIsPlaying) {
+        themeSong.play();
+      }
+    } else {
+      themeSong.pause();
+    }
+  }
+
+  function restartGame() {
+    gameIsRunning = !gameIsRunning;
+    loadEntities();
+    main();
+    gameOverModal.classList.toggle("hide");
+  }
+
+  function startGame() {
+    gameIsRunning = !gameIsRunning;
+    themeSong.play();
+    loadEntities();
+    main();
+    toggleTitleScreen();
+  }
+
+  function toggleTitleScreen() {
+    titleModal.classList.toggle("hide");
+  }
 
   function collides(x, y, r, b, x2, y2, r2, b2) {
     return (x > (x2 - r) && x < (x2 + r2 + r)) && (y > (y2 - b) && y < (y2 + b2 + b));
@@ -60,6 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let enemy2;
 
   function loadEntities() {
+    playerArray = [];
+    enemies = [];
     player = new Ship("images/main_player.png", [canvas.width / 2 - 25, 500], [50, 40], 500);
     enemy1 = new Enemy("images/mother1.png", [canvas.width / 4 - 33, 50], [75, 100], 100);
     enemy2 = new Enemy("images/mother1.png", [canvas.width * 3 / 4 - 33, 50], [75, 100], 100);
@@ -155,14 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (e.keyCode == 32) {
       spacePressed = true;
     } else if (e.keyCode == 27) {
-      gameIsRunning = !gameIsRunning;
-
-      if(gameIsRunning) {
-        requestAnimationFrame(main);
-        themeSong.play();
-      } else {
-        themeSong.pause();
-      }
+      togglePause();
     }
   }
 
@@ -191,12 +241,18 @@ document.addEventListener('DOMContentLoaded', () => {
         i--;
       }  
     }
-
-    console.log(explosions);
   }
 
   function updateAllEntities() {
-    player.render(ctx);
+    if (player.lives > 0) {
+      player.render(ctx);
+    }
+
+    if (enemies.length === 0 || player.lives <= 0 && gameOverModal.classList.contains("hide")) {
+      gameOverModal.classList.toggle("hide");
+      gameIsRunning = !gameIsRunning;
+    }
+  
     enemies.forEach(enem => {
       enem.render(ctx);
       enem.updateBullets(canvas);
@@ -282,10 +338,10 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   let then = Date.now();
-  loadEntities();
-  if(!gameover()) {
-    main();
-  }
+  // loadEntities();
+  // if(!gameover()) {
+  //   main();
+  // }
   
 });
 

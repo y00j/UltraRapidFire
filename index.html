@@ -7,10 +7,33 @@
     <link rel="stylesheet" href="titleScreen.css">
   </head>
   <body>
+
+    <button class="toggle-sound-btn">sound</button>
     
-    <div class="title-screen show">title screen </div>
+    <div class="title-modal">
+      <div class="title-screen">
+        <h1>Welcome to UltraRapidFire</h1>
+        <p> Shoot down your enemies and don't get hit!</p>
+        <img src="images/arrow" alt="">
+        <button class="play-game-btn"> Play Game </button>
+      </div>
+    </div>
 
     
+    <div class="game-over-modal hide">
+      <div class="game-over-screen">
+        <h1>Game Over</h1>
+        <button class="play-again-btn"> Play Again </button>
+      </div>
+    </div>
+
+    <div class="pause-modal hide">
+      <div class="pause-screen">
+        <h1>Paused</h1>
+        <button class="resume-btn"> Resume </button>
+      </div>
+    </div>
+  
 
     <div class="game-body">
       <h1 class="title">Ultra Rapid Fire</h1>

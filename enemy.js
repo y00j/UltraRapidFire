@@ -9,7 +9,7 @@ class Enemy extends Entity {
     this.bullets = [];
     this.shootBullet = this.shootBullet.bind(this);
     this.updateBullets = this.updateBullets.bind(this);
-    this.health = 10;
+    this.health = 5;
     this.lastTimeFired = Date.now();
   }
 

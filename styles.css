@@ -5,7 +5,6 @@ h1 {
   font-weight: 600;
 }
 
-
 canvas {
   background-image: url("images/farback.png");
   height: 100vh;
@@ -24,7 +23,75 @@ canvas {
 
 body {
   background-image: url("images/hyperspace.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    overflow: hidden;
+  background-size: cover;
+  background-repeat: no-repeat;
+  overflow: hidden;
 }
+
+@keyframes fadein {
+  0% { opacity: 0; }
+  100% { opacity: .8; }
+}
+
+.title-modal, .game-over-modal, .pause-modal {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  align-items: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("images/hyperspace.jpg");    
+}
+
+.title-screen, .game-over-screen, .pause-screen {
+  z-index: 2;
+  color: white;
+  width: 50%;
+  height: 50%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(21, 78, 116);
+  border: 3px solid grey;
+  opacity: 0.85;
+  border-radius: 5px;
+}
+
+.title-screen button { 
+  color: blue;
+  font-weight: 700;
+  font-size: 15px;
+  border: 3px solid grey;
+  height: 50px;
+  width: 100px;
+}
+
+.pause-screen button { 
+  color: blue;
+  font-weight: 700;
+  font-size: 15px;
+  border: 3px solid grey;
+  height: 50px;
+  width: 100px;
+}
+
+.game-over-screen button { 
+  color: red;
+  font-weight: 700;
+  font-size: 15px;
+  border: 3px solid grey;
+  height: 50px;
+  width: 100px;
+}
+
+.hide{
+  display: none;  
+}
+
+
+
+
