@@ -1,4 +1,4 @@
-h1 {
+h1, p {
   font-family: 'Orbitron',
   sans-serif;
   color: #07efeb;
@@ -33,7 +33,7 @@ body {
   100% { opacity: .8; }
 }
 
-.title-modal, .game-over-modal, .pause-modal {
+.title-modal, .pause-modal {
   display: flex;
   justify-content: center;
   position: absolute;
@@ -43,6 +43,23 @@ body {
   right: 0;
   bottom: 0;
   background-image: url("images/hyperspace.jpg");    
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.game-over-modal {
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  align-items: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("images/hyperspace.jpg");    
+  animation: fadein 2s linear;
 }
 
 .title-screen, .game-over-screen, .pause-screen {
@@ -86,12 +103,25 @@ body {
   border: 3px solid grey;
   height: 50px;
   width: 100px;
+ 
 }
 
 .hide{
   display: none;  
 }
 
+.toggle-sound-btn {
+  z-index: 3;
+  color: blue;
+  font-weight: 700;
+  font-size: 15px;
+  border: 3px solid grey;
+  height: 50px;
+  width: 100px;
+}
 
+.pressed {
+  background-color: red;
+}
 
 

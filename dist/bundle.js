@@ -6327,9 +6327,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
  
 document.addEventListener('DOMContentLoaded', () => {
-
   let gameIsRunning = false;
-
   var canvas = document.getElementById("canvas");
   var ctx = canvas.getContext("2d");
 
@@ -6381,10 +6379,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function toggleSound() {
     soundIsPlaying = !soundIsPlaying;
+    soundButton.classList.toggle("pressed");
     if (soundIsPlaying) {
       themeSong.play();
     } else {
       themeSong.pause();
+      
     }
   }
 
@@ -6411,6 +6411,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function startGame() {
     gameIsRunning = !gameIsRunning;
+    soundIsPlaying = true;
     themeSong.play();
     loadEntities();
     main();
